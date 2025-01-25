@@ -62,7 +62,8 @@ if (token !== null){
     const portfolioHeader = document.querySelector(".portfolio-header");
     const modify = document.createElement("a");
     modify.classList.add("modify");
-    modify.href = "#";
+    modify.classList.add("js-modal");
+    modify.href = "#modal";
     portfolioHeader.appendChild(modify);
 
     const modifyIcon = document.createElement("i");
