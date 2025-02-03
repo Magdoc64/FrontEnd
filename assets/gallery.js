@@ -1,103 +1,11 @@
-const gallery = document.querySelector(".gallery");
-
-async function getWorks(){
-    const url = "http://localhost:5678/api/works";
-    const response = await fetch(url);
-    const works = await response.json();
-    return works;
-}
-
-let createGallery = (worksToDisplay, place) => {
-    worksToDisplay.forEach(workToDisplay => {
-        const figure = document.createElement("figure");
-        figure.classList.add("figure-gallery")
-        figure.dataset.id = workToDisplay.category.id;
-        place.appendChild(figure);
-
-        const image = document.createElement("img");
-        image.src = workToDisplay.imageUrl;
-        image.alt = workToDisplay.title;
-        figure.appendChild(image);
-
-        const figcaption = document.createElement("figcaption");
-        figcaption.innerHTML = workToDisplay.title;
-        figure.appendChild(figcaption);
-    })   
-}
-
-let token = window.localStorage.getItem("token");
-
-if (token !== null){
-    const headband = document.createElement("div");
-    headband.classList.add("headband-edition");
-    
-    let header = document.querySelector("header");
-    header.appendChild(headband);
-
-    let divHeader = document.querySelector(".div-header");
-
-    const divHeaderParent = divHeader.parentNode;
-    divHeaderParent.insertBefore(headband, divHeader);
-
-    let titleHeader = document.querySelector("h1");
-    divHeader.appendChild(titleHeader);
-
-    let navigationHeader = document.querySelector("nav");
-    divHeader.appendChild(navigationHeader);
-
-    const headbandIcon = document.createElement("i");
-    headbandIcon.classList.add("fa-regular");
-    headbandIcon.classList.add("fa-pen-to-square")
-    headband.appendChild(headbandIcon);
-
-    const headbandText = document.createElement("p");
-    headbandText.classList.add("headband-text");
-    headbandText.innerHTML = "Mode édition";
-    headband.appendChild(headbandText);
-
-    const log = document.querySelector(".log");
-    log.innerHTML = "logout";
-    log.href = "#";
-
-    const portfolioHeader = document.querySelector(".portfolio-header");
-    const modify = document.createElement("a");
-    modify.classList.add("modify");
-    modify.classList.add("js-modal");
-    modify.href = "#modal";
-    portfolioHeader.appendChild(modify);
-
-    const modifyIcon = document.createElement("i");
-    modifyIcon.classList.add("fa-regular");
-    modifyIcon.classList.add("fa-pen-to-square");
-    modify.appendChild(modifyIcon);
-
-    const modifyText = document.createElement("p");
-    modifyText.classList.add("modify-text");
-    modifyText.innerHTML = "modifier";
-    modify.appendChild(modifyText);
-
-}
+// create gallery with filter
+import {getWorks, createGallery} from "./function-appli.js";
 
 let worksList = getWorks().then((works) => {
     createGallery(works,gallery);
 });
 
-
-async function getCategories(){
-    const url = "http://localhost:5678/api/categories";
-    const response = await fetch(url);
-    const categories = await response.json();
-    return categories;
-}
-
-let filter = document.createElement("ul");
-filter.classList.add("filter");
-
-let parentFilter = document.querySelector("#portfolio");
-parentFilter.appendChild(filter);
-
-const galleryParent = gallery.parentNode;
-galleryParent.insertBefore(filter, gallery);
+import {getCategories} from "./function-appli.js";
 
 let filterCategories = getCategories().then(categories => {
     
@@ -117,9 +25,8 @@ let filterCategories = getCategories().then(categories => {
         filterItem.dataset.id = category.id;
 
         filter.appendChild(filterItem);
-        });
-        
-    });
+    }); 
+});
 
 let filterButtons = getCategories().then(categories => {
     
@@ -141,15 +48,13 @@ let filterButtons = getCategories().then(categories => {
 
             if (buttonsId === "Tous"){
 
-                let works = getWorks().then (works => {
-                    createGallery(works, gallery);
-                });
+                worksList();
                 
             }else{
 
                 let worksFiltered = getWorks().then (works => {
                     let buttonId = parseInt(event.target.dataset.id);
-
+            
                     worksFiltered = works.filter((work) => work.category.id === buttonId);
 
                     createGallery(worksFiltered, gallery);
@@ -159,12 +64,23 @@ let filterButtons = getCategories().then(categories => {
     })
 });
 
-const log = document.querySelector(".log");
+// Edit mode
+
+let token = localStorage.getItem("token");
+
+import {editMode, openModal} from "./function-appli.js";
+
+if (token !== null){
+    editMode();
+
+}
+
+//configuration logout
 
 log.addEventListener("click", () => {
-    window.localStorage.removeItem("token");
+    localStorage.clear();
 
-    token = window.localStorage.getItem("token");
+    modalBox.removeEventListener("click", openModal);
 
     location.reload();
 })              

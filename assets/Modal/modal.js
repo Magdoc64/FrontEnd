@@ -1,85 +1,8 @@
-const galleryModal = document.querySelector(".gallery-modal");
-
-const modalBox = document.querySelector(".js-modal");
-const buttonClose = document.querySelector(".modal-close");
-const modalStop = document.querySelector(".modal-stop");
-
-const buttonModal = document.querySelector(".button-modal");
-const titleModal = document.querySelector("#title-modal");
-
-const buttonAddImage = document.querySelector(".button-add-image");
-const addImagePicture = document.querySelector(".add-image-picture");
-const addImage = document.querySelector(".add-image");
-const addGallery = document.querySelector(".add-gallery");
-
-const modalAdd = document.querySelector(".modal-add");
-const arrowPrevious = document.querySelector(".arrow-previous");
-
-const inputImage = document.querySelector("#button-add-image");
-const inputTitle = document.querySelector("#add-title");
-const selectCategory = document.querySelector("#category");
-
-const iFontAwesome = document.querySelector(".fa-image");
-const commentImage = document.querySelector(".comment-add-image");
-
-let modal = null;
-
-async function getWorks(){
-    const url = "http://localhost:5678/api/works";
-    const response = await fetch(url);
-    const works = await response.json();
-    return works;
-}
-
-let createGalleryImage = (worksToDisplay, place) => {
-    worksToDisplay.forEach(workToDisplay => {
-        
-        const figureModal = document.createElement("figure");
-        figureModal.classList.add("figure-gallery-modal")
-        place.appendChild(figureModal);
-
-        const imageModal = document.createElement("img");
-        imageModal.src = workToDisplay.imageUrl;
-        imageModal.alt = workToDisplay.title;
-        figureModal.appendChild(imageModal);
-
-        const iconDelete = document.createElement("i");
-        iconDelete.classList.add("fa-solid");
-        iconDelete.classList.add("fa-trash-can");
-        figureModal.appendChild(iconDelete);
-    })   
-}
-
-const openModal = (e) => {
-    e.preventDefault();
-
-    const target = document.querySelector(".modal");
-    modal = target;
-
-    modal.style.display = "flex";
-
-    modal.removeAttribute("aria-hidden");
-    modal.setAttribute("aria-modal", "true");
-
-    let imageList = getWorks().then((works) => {
-        createGalleryImage(works,galleryModal);
-    });
-
-    modal.addEventListener("click", closeModal);
-
-    buttonClose.addEventListener("click", closeModal);
-
-    modalStop.addEventListener("click", stopPropagation);
-}
-
 const closeModal = (e) => {
-    if (modal === null) return;
 
     e.preventDefault();
 
     modal.style.display = "none";
-    modal.setAttribute("aria-hidden", "true");
-    modal.removeAttribute("aria-modal");
 
     galleryModal.innerHTML = "";
 
@@ -89,119 +12,63 @@ const closeModal = (e) => {
 
     modalStop.removeEventListener("click", stopPropagation);
 
-    modal = null;
 }
 
 const stopPropagation = (e) => {
     e.stopPropagation();
 }
 
-modalBox.addEventListener("click", openModal);
+buttonClose.addEventListener("click", closeModal);
 
-let getCategory = async () => {
-    const url = "http://localhost:5678/api/categories";
-    const response = await fetch(url);
-    const categories = await response.json();
-    return categories;
-}
+modalStop.addEventListener("click", stopPropagation);
 
-let deleteCategories = () => {
-    selectCategory.innerHTML = "";
+//create modal add image
 
-    let option = document.createElement("option");
-    option.innerHTML = "";
-    selectCategory.appendChild(option);    
-}
+import {getCategories, getWorks} from "../function-appli.js";
 
-let addImageModal = () => {
-  
-    arrowPrevious.style.display = "flex";
+import {initCategories, addImageModal} from "./functions-modal.js";
 
-    let buttonModal = document.querySelector(".button-modal");
-    buttonModal.style.justifyContent = "space-between";
-    
-    let titleModal = document.querySelector("#title-modal");
-    titleModal.innerHTML = "Ajout photo";
-    titleModal.style.color = "#000000";
+let secondPageModal = () => {
 
-    let galleryModal = document.querySelector(".gallery-modal");
-    galleryModal.innerHTML = "";
-    galleryModal.style.display = "none";
+    addImageModal();
 
-    let addGallery = document.querySelector(".add-gallery");
-    addGallery.style.display = "flex";
-
-    modalAdd.innerHTML = "Valider";
-    modalAdd.style.backgroundColor = "#A7A7A7";
-    modalAdd.style.border = "none";
-    modalAdd.style.cursor = "default";
-
-    let choiceCategory = getCategory().then(categories => {
+    let choiceCategory = getCategories().then(categories => {
         
-        deleteCategories();
+        initCategories();
 
         categories.forEach(category => {
 
             let option = document.createElement("option");
             option.innerHTML = category.name;
+            option.value = category.id;
             selectCategory.appendChild(option);
         })
     });
 }
 
-let returnModal = () => {
-  
-    arrowPrevious.style.display = "none";
+modalAdd.addEventListener("click", secondPageModal);
 
-    buttonModal.style.justifyContent = "end";
-    
-    titleModal.innerHTML = "Galerie photo";
-    titleModal.style.color = "#000000";
+//return modal origin
 
-    galleryModal.innerHTML = "";
-    
-    galleryModal.style.display = "grid";
-    let imageList = getWorks().then((works) => {
-        createGalleryImage(works,galleryModal);
-    });
+import {returnModal} from "./functions-modal.js";
 
-    addGallery.style.display = "none";
+arrowPrevious.addEventListener("click", () => {
+    returnModal();
 
-    modalAdd.innerHTML = "Ajouter une photo";
-    modalAdd.style.backgroundColor = "#1D6154";
-    modalAdd.style.border = "1px solid #1D6154";
-    modalAdd.style.cursor = "pointer";
+    modalAdd.removeEventListener("click", sendFile);
 
-}
+    modalAdd.addEventListener("click", secondPageModal);
 
-modalAdd.addEventListener("click", addImageModal);
+    buttonClose.addEventListener("click", closeModal);
 
-arrowPrevious.addEventListener("click", returnModal);
+    modalStop.addEventListener("click", stopPropagation);
+});
 
-let checkErrorImage = (fileSize) => {
-        
-    iFontAwesome.classList.remove(".fa-regular");
-    iFontAwesome.classList.remove(".fa-image");
-    iFontAwesome.classList.add("fa-solid");
-    iFontAwesome.classList.add("fa-triangle-exclamation");
+// add image 
 
-    commentImage.classList.add("error-image");
-    commentImage.innerHTML = "L'image est trop lourde. Veuillez choisir une autre image."
-    commentImage.style.color = "rgba(250, 5, 16, 1)";
-}
+import {checkErrorImage, initErrorImage, addPreviewImage, closePreviewImage} from "./functions-modal.js";
 
-let initErrorImage = () => {
-    if (iFontAwesome.classList.contains(".fa-triangle-exclamation")) {
-
-        iFontAwesome.classList.add(".fa-regular");
-        iFontAwesome.classList.add(".fa-image");
-        iFontAwesome.classList.remove("fa-solid");
-        iFontAwesome.classList.remove("fa-triangle-exclamation");
-
-        commentImage.classList.remove("error-image");
-        commentImage.innerHTML = "jpg, png : 4mo max";  
-    }
-}
+let newWork =[];
 
 buttonAddImage.addEventListener("click", (e) => {
      
@@ -219,67 +86,155 @@ buttonAddImage.addEventListener("click", (e) => {
 
         if (fileSize >= 4e6) {
 
-            checkErrorImage(fileSize);
+            checkErrorImage();
 
         }else{
-
-            const previewImage = document.createElement("img");
-            previewImage.classList.add("preview-image");
-            previewImage.style.display="flex";
+ 
+            addPreviewImage();
+            
             previewImage.file = file;
-            addImage.appendChild(previewImage);
-
+            
+            newWork.push(previewImage.file);
+            
             const reader = new FileReader();
             
             reader.onload = (e) => {
                 previewImage.src = e.target.result;
-              };
+            };
             
             reader.readAsDataURL(file);
-
-            addImagePicture.style.display = "none";
-            commentImage.style.display = "none";
-            buttonAddImage.style.display = "none";
         }
     })
-
 });
 
-inputImage.classList.add("inputForm");
-inputTitle.classList.add("inputForm");
-selectCategory.classList.add("inputForm");
+import {checkInputValid, initInputValid} from "./functions-modal.js";
 
-let inputs = document.querySelectorAll(".inputForm");
+let token = localStorage.getItem("token");
 
-let inputError = [];
+let jsontoken = JSON.stringify(token);
+console.log(jsontoken);
 
-let checkInputValid = () => {
+console.log(`Bearer ${token}`);
+
+const postStatusWork = async (newProject) => {
+    const url = "http://localhost:5678/api/works";
+                
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json" },
+        body: JSON.stringify(newProject),
+    });
     
+    console.log(response.status);
+    return response.status;
+};
 
-    inputs.forEach(input => {
+const postNewWork = async (newProject) => {
+    const url = "http://localhost:5678/api/works";
+                
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json" },
+        body: JSON.stringify(newProject),
+    });
+                
+    const newWorks = await response.json();
+    
+    return newWorks;
+};
 
-        if (input.value === null || input.value === ""){
-            input.classList.add("error-input");
-            inputError.push("donnée absente");
+let userIdActive = parseInt(localStorage.getItem("userId"));
+
+const sendFile = () => {
+    let errorFile = [];
+
+    const sizeFile = newWork[0].size;
+
+    const namefile = newWork[0].name;
+ 
+    const splitFile = namefile.split(".");
+    const extensionImage = splitFile[1];
+
+    let checkErrorFile = () => {
+        if (sizeFile >= 4e6){
+            errorFile.push("Fichier trop lourd");
         }
-     
-    })
-}
-
-let initInputValid = () => {
-
-    inputError = [];
-
-    inputs.forEach(input => {
-
-        if(input.classList.contains("error-input")){
-            input.classList.remove("error-input")
+    
+        if (formatImage.includes(extensionImage) === false){
+            errorFile.push("Fichier au mauvais format");
         }
-    })
+    }
+
+    checkErrorFile();
+
+    if (errorFile.length > 0){
+        errorSending.style.display ="flex";
+        errorSending.innerHTML = errorFile.join(", ");
+                
+    }else{
+            
+        let titleNewWork = inputTitle.value;
+
+        let newWorkUrl = "http://localhost:5678/images/" + titleNewWork+"."+extensionImage;
+
+        let categoryIndex = selectCategory.selectedIndex;
+
+        let categoryNewWork = selectCategory.options[categoryIndex].value;
+
+        let newProject = new FormData();
+        newProject.append("title", titleNewWork);
+        //newProject.append("imageUrl", newWorkUrl);
+        newProject.append("categoryId", categoryNewWork);
+        //newProject.append("userId", userIdActive);
+        newProject.append("file", newWork[0]);
+
+        for (let formValue of newProject.values()){
+            console.log(formValue);
+        }
+
+        /*let newProject = {
+            "title": titleNewWork,
+            "imageUrl": newWorkUrl,
+            "categoryId": categoryNewWork,
+            "userId": userIdActive
+        }
+
+        console.log(newProject);*/
+
+        postStatusWork(newProject).then(res => {
+            if (res === 200){
+                postNewWork(newProject).then(newProject => {
+                    console.log(newProject);
+
+                    inputs.forEach(input => {
+                        input.value=""
+                    })
+                });
+
+                closePreviewImage();
+
+                closeModal(e);
+
+                location = "http://127.0.0.1:5500/index.html";
+
+            }else if (res === 401){
+                errorSending.innerHTML = "Vous n'êtes pas autorisé à ajouter un projet.";
+                errorSending.style.display = "flex";
+
+            }else{
+                errorSending.innerHTML = "Une erreur s'est produite. Contacter l'administrateur du site.";
+                errorSending.style.display = "flex";
+            }
+        });
+    } 
 }
 
 addGallery.addEventListener("change", () => {
-    
+
     initInputValid();
 
     inputs.forEach(input => {
@@ -287,23 +242,75 @@ addGallery.addEventListener("change", () => {
     })
 
     if(inputError.length === 0){
-        modalAdd.style.backgroundColor = "#1D6154";
-        modalAdd.style.border = "1px solid #1D6154";
-        modalAdd.style.cursor = "pointer";
+        modalAdd.classList.remove("button-inactive");
+        modalAdd.classList.add("button-active");
 
-        modalAdd.addEventListener("click", (e) => {
-            closeModal(e);
-            inputs.forEach(input => {
-                input.value=""
-            })
-            const image = document.querySelector(".preview-image");
-            image.style.display = "none";
-
-            addImagePicture.style.display = "flex";
-            commentImage.style.display = "flex";
-            buttonAddImage.style.display = "flex";
-        })
-    }
+        modalAdd.addEventListener("click", sendFile)
+    }   
 })
+
+/*const statusDelete = async (trashWork) => {
+    const url = "http://localhost:5678/api/works";
+                
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json" },
+        body: JSON.stringify(trashWork),
+    });
+                
+    console.log(response.status);
+    return response.status;
+};
+
+const deleteWorks = async (trashWork) => {
+    const url = "http://localhost:5678/api/works";
+                
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json" },
+        body: JSON.stringify(trashWork),
+    });
+                
+    const deleteWork = await response.json();
+    
+    return deleteWork;
+};
+
+getWorks() .then (works => {
+    works.forEach(work => {
+        trashButton.addEventListener("click", (e) => {
+            let workId = work.id;
+
+            deleteWorks() .then(deleteWork => {
+                let trashWork = {
+                id: workId
+                }
+
+                statusDelete(trashWork) .then(res => {
+                    if (res === 200) {
+                        closeModal(e);
+
+                        location = "http://127.0.0.1:5500/index.html";
+
+                    }else if (res === 401) {
+                        errorSending.innerHTML = "Vous n'êtes pas autorisé à supprimer.";
+                        errorSending.style.display = "flex";
+
+                    }else{
+                        errorSending.innerHTML = "Une erreur s'est produite. Contacter l'administrateur du site.";
+                        errorSending.style.display = "flex";
+
+                    }
+                }
+
+            })
+        })
+    })
+})*/
+
 
 

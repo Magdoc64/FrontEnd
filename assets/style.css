@@ -46,6 +46,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a{
+	text-decoration: none;
+	color: inherit;
+}
 /** end reset css**/
 body {
 	max-width: 1440px;
@@ -256,6 +260,7 @@ margin: auto;
 	color: #3D3D3D;
 	text-align: center;
 }
+
 .email, .password {
 	height: 51px;
 	border: none;
@@ -360,21 +365,31 @@ footer nav ul {
 	margin:0;
 	margin-top: 40px;
 	padding:0;
-	border: 1px solid #1D6154;
-	background-color: #1D6154;
-	color:#ffffff;
 	border-radius: 60px;
 	appearance: none;
-	cursor: pointer;
+	color:#ffffff;
 	font-family: "Syne";
 	font-weight: 700;
 	font-size: 14px;
+}
+
+.button-active{
+	border: 1px solid #1D6154;
+	background-color: #1D6154;
+	cursor: pointer;
+}
+
+.button-inactive{
+	background-color: #A7A7A7;
+    border: none;
+    cursor: default;
 }
 
 #title-modal{
 	font-family: "Work Sans";
 	font-weight: 400;
 	font-size: 26px;
+	color : #000000;
 	margin-bottom: 50px;
 	margin-top: 20px;
 }
@@ -415,7 +430,7 @@ footer nav ul {
 	cursor: pointer;
 }
 
-.add-gallery{
+#add-gallery{
 	display: none;
 	flex-direction: column;
 	align-items: center;
@@ -459,6 +474,13 @@ footer nav ul {
 	font-size: 10px;
 	color: #444444;
 	margin-bottom: 10px;
+}
+
+.preview-image{
+	display: none;
+}
+.error-image{
+	color:rgba(250, 5, 16, 1);
 }
 
 .title-picture{
@@ -507,4 +529,8 @@ footer nav ul {
 	margin: 10px 0 20px 0;
 }
 
+.error-sending{
+	display:none;
+	color: rgba(250, 5, 16, 1);
+}
 

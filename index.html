@@ -15,8 +15,10 @@
       referrerpolicy="no-referrer">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
-	<script src="./assets/gallery.js" defer></script>
-	<script src="./assets/Modal/modal.js" defer></script>
+	<script src="./assets/variables.js" defer></script>
+	<script type="module" src="./assets/gallery.js" defer></script>
+	<script src="./assets/Modal/variables-modal.js" defer></script>
+	<script type="module" src="./assets/Modal/modal.js" defer></script>
 </head>
 <body>
 <div class="container">
@@ -49,6 +51,9 @@
 		<div class="portfolio-header">
 			<h2 class="title-portfolio">Mes Projets</h2>
 		</div>
+		<ul class="filter">
+
+		</ul>
 		<div class="gallery">
 			
 		</div>
@@ -66,27 +71,29 @@
 				<div class="gallery-modal">
 
 				</div>
-				<form class="add-gallery">
-					<div class="add-image">
-						<label for="#button-add-image" class="add-image-picture">
+				<form id="add-gallery">
+					<fieldset class="add-image">
+						<img class="preview-image" src="">
+						<label for="button-add-image" class="add-image-picture">
 							<i class="fa-regular fa-image"></i>
 						</label>
-						<input type="file" name="image" id="button-add-image" accept=".jpg, .jpeg, .png" style="display: none;">
+						<input type="file" name="image" id="button-add-image" class="input-form" accept=".jpg, .jpeg, .png" style="display: none;">
 						<button class="button-add-image">+ Ajouter photo</button>
 						<p class="comment-add-image">jpg, png : 4mo max</p>
-					</div>
-					<div class="title-picture">
+					</fieldset>
+					<fieldset class="title-picture">
 						<label for="add-title" class="title">Titre</label>
-						<input type="text" name="add-title" id="add-title">
-					</div>
-					<div class="category-picture">
+						<input type="text" name="add-title" id="add-title" class="input-form">
+					</fieldset>
+					<fieldset class="category-picture">
 						<label for="category" class="category">Catégorie</label>
-						<select name="category" id="category">
-							<option></option>
+						<select name="category" id="category" class="input-form">
+							<option selected></option>
 						</select>
-					</div>
+					</fieldset>
 				</form>
-				<button class="modal-add">Ajouter une photo</button>
+				<button class="modal-add button-active">Ajouter une photo</button>
+				<p class="error-sending"></p>
 			</div>
 		</aside>
 	</section>
