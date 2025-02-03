@@ -122,9 +122,8 @@ const postStatusWork = async (newProject) => {
     const response = await fetch(url, {
         method: "POST",
         headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json" },
-        body: JSON.stringify(newProject),
+            "Authorization": `Bearer ${token}`},
+        body: newProject,
     });
     
     console.log(response.status);
@@ -137,9 +136,8 @@ const postNewWork = async (newProject) => {
     const response = await fetch(url, {
         method: "POST",
         headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json" },
-        body: JSON.stringify(newProject),
+            "Authorization": `Bearer ${token}`},
+        body: newProject,
     });
                 
     const newWorks = await response.json();
@@ -176,43 +174,26 @@ const sendFile = () => {
         errorSending.innerHTML = errorFile.join(", ");
                 
     }else{
-            
-        let titleNewWork = inputTitle.value;
 
-        let newWorkUrl = "http://localhost:5678/images/" + titleNewWork+"."+extensionImage;
-
-        let categoryIndex = selectCategory.selectedIndex;
-
-        let categoryNewWork = selectCategory.options[categoryIndex].value;
-
-        let newProject = new FormData();
-        newProject.append("title", titleNewWork);
+        let newProject = new FormData(addGallery);
+        //newProject.append("title", titleNewWork);
         //newProject.append("imageUrl", newWorkUrl);
-        newProject.append("categoryId", categoryNewWork);
+        //newProject.append("categoryId", categoryNewWork);
         //newProject.append("userId", userIdActive);
-        newProject.append("file", newWork[0]);
+        //newProject.append("imageUrl", newWorkUrl);
 
         for (let formValue of newProject.values()){
             console.log(formValue);
         }
 
-        /*let newProject = {
-            "title": titleNewWork,
-            "imageUrl": newWorkUrl,
-            "categoryId": categoryNewWork,
-            "userId": userIdActive
-        }
-
-        console.log(newProject);*/
-
         postStatusWork(newProject).then(res => {
             if (res === 200){
                 postNewWork(newProject).then(newProject => {
-                    console.log(newProject);
+                    for (let formValue of newProject.values()){
+                        console.log(formValue);
+                    }
 
-                    inputs.forEach(input => {
-                        input.value=""
-                    })
+                    addGallery.reset();
                 });
 
                 closePreviewImage();
