@@ -100,17 +100,29 @@ export let createGalleryImage = (worksToDisplay, place) => {
         imageModal.alt = workToDisplay.title;
         figureModal.appendChild(imageModal);
 
+        const buttonTrash =document.createElement("button");
+        buttonTrash.classList.add("button-trash");
+        buttonTrash.value = workToDisplay.id;
+        figureModal.appendChild(buttonTrash);
+
+        let projectId = buttonTrash.value;
+        
+        buttonTrash.addEventListener("click", () => {
+            console.log(projectId);
+            deleteProject(projectId, figureModal);
+        })
+
         const iconDelete = document.createElement("i");
         iconDelete.classList.add("fa-solid");
         iconDelete.classList.add("fa-trash-can");
-        figureModal.appendChild(iconDelete);
-    })   
+        buttonTrash.appendChild(iconDelete);
+    })
 }
 
 let modal = null;
+
 export const openModal = (e) => {
     
-
     e.preventDefault();
 
     const target = document.querySelector(".modal");
@@ -120,13 +132,19 @@ export const openModal = (e) => {
 
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
+    modal.classList.add("modal-active");
 
     let imageList = getWorks().then(works => {
-    createGalleryImage(works,galleryModal);
+        createGalleryImage(works,galleryModal);
     });
 
     modal.addEventListener("click", closeModal);
 
+    buttonClose.addEventListener("click", closeModal);
+
+    modalStop.addEventListener("click", stopPropagation);
+
+    
 }
 
 const closeModal = (e) => {
@@ -137,6 +155,7 @@ const closeModal = (e) => {
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
     modal.removeAttribute("aria-modal");
+    modal.classList.remove("modal-active");
 
     galleryModal.innerHTML = "";
 
@@ -151,4 +170,40 @@ const closeModal = (e) => {
 
 const stopPropagation = (e) => {
     e.stopPropagation();
+}
+
+//Delete project
+
+const statusDelete = async (projectId) => {
+    const url = `http://localhost:5678/api/works/${projectId}`;
+                
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: { 
+            "Authorization": `Bearer ${token}`},
+    });
+                
+    console.log(response.status);
+    return response.status;
+};
+
+const deleteProject = (projectId, figureModal) => {
+
+    statusDelete(projectId) .then(res => {
+        if (res === 204) {
+
+            figureModal.remove();
+
+            location = "http://127.0.0.1:5500/index.html";
+
+        }else if (res === 401) {
+            errorSending.innerHTML = "Vous n'êtes pas autorisé à supprimer.";
+            errorSending.style.display = "flex";
+
+        }else{
+            errorSending.innerHTML = "Une erreur s'est produite. Contacter l'administrateur du site.";
+            errorSending.style.display = "flex";
+
+        }
+    });
 }

@@ -96,8 +96,9 @@ submit.addEventListener("click", (event) => {
 
     }else{
         event.preventDefault();
-        
+
         postStatus(usersIdentify).then((res) => {
+
             if(res===200){
                 postUsers(usersIdentify).then((users) => {
                     let tokenRecovery = users.token;
@@ -121,3 +122,4 @@ submit.addEventListener("click", (event) => {
         });
     }
 })
+

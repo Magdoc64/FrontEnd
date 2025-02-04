@@ -109,13 +109,6 @@ buttonAddImage.addEventListener("click", (e) => {
 
 import {checkInputValid, initInputValid} from "./functions-modal.js";
 
-let token = localStorage.getItem("token");
-
-let jsontoken = JSON.stringify(token);
-console.log(jsontoken);
-
-console.log(`Bearer ${token}`);
-
 const postStatusWork = async (newProject) => {
     const url = "http://localhost:5678/api/works";
                 
@@ -126,28 +119,10 @@ const postStatusWork = async (newProject) => {
         body: newProject,
     });
     
-    console.log(response.status);
     return response.status;
 };
 
-const postNewWork = async (newProject) => {
-    const url = "http://localhost:5678/api/works";
-                
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { 
-            "Authorization": `Bearer ${token}`},
-        body: newProject,
-    });
-                
-    const newWorks = await response.json();
-    
-    return newWorks;
-};
-
-let userIdActive = parseInt(localStorage.getItem("userId"));
-
-const sendFile = () => {
+const sendFile = (e) => {
     let errorFile = [];
 
     const sizeFile = newWork[0].size;
@@ -176,26 +151,12 @@ const sendFile = () => {
     }else{
 
         let newProject = new FormData(addGallery);
-        //newProject.append("title", titleNewWork);
-        //newProject.append("imageUrl", newWorkUrl);
-        //newProject.append("categoryId", categoryNewWork);
-        //newProject.append("userId", userIdActive);
-        //newProject.append("imageUrl", newWorkUrl);
-
-        for (let formValue of newProject.values()){
-            console.log(formValue);
-        }
 
         postStatusWork(newProject).then(res => {
-            if (res === 200){
-                postNewWork(newProject).then(newProject => {
-                    for (let formValue of newProject.values()){
-                        console.log(formValue);
-                    }
-
-                    addGallery.reset();
-                });
-
+            if (res === 201){
+                
+                addGallery.reset();
+                
                 closePreviewImage();
 
                 closeModal(e);
@@ -230,68 +191,8 @@ addGallery.addEventListener("change", () => {
     }   
 })
 
-/*const statusDelete = async (trashWork) => {
-    const url = "http://localhost:5678/api/works";
-                
-    const response = await fetch(url, {
-        method: "DELETE",
-        headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json" },
-        body: JSON.stringify(trashWork),
-    });
-                
-    console.log(response.status);
-    return response.status;
-};
 
-const deleteWorks = async (trashWork) => {
-    const url = "http://localhost:5678/api/works";
-                
-    const response = await fetch(url, {
-        method: "DELETE",
-        headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json" },
-        body: JSON.stringify(trashWork),
-    });
-                
-    const deleteWork = await response.json();
-    
-    return deleteWork;
-};
 
-getWorks() .then (works => {
-    works.forEach(work => {
-        trashButton.addEventListener("click", (e) => {
-            let workId = work.id;
-
-            deleteWorks() .then(deleteWork => {
-                let trashWork = {
-                id: workId
-                }
-
-                statusDelete(trashWork) .then(res => {
-                    if (res === 200) {
-                        closeModal(e);
-
-                        location = "http://127.0.0.1:5500/index.html";
-
-                    }else if (res === 401) {
-                        errorSending.innerHTML = "Vous n'êtes pas autorisé à supprimer.";
-                        errorSending.style.display = "flex";
-
-                    }else{
-                        errorSending.innerHTML = "Une erreur s'est produite. Contacter l'administrateur du site.";
-                        errorSending.style.display = "flex";
-
-                    }
-                }
-
-            })
-        })
-    })
-})*/
 
 
 

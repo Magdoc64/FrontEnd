@@ -31,4 +31,4 @@ let inputError = [];
 const errorSending = document.querySelector(".error-sending");
 const formatImage = ["jpg", "jpeg", "png"];
 
-const trashButton = document.querySelector(".fa-trash-can")
+

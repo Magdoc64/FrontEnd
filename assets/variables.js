@@ -12,5 +12,8 @@ const filter = document.querySelector(".filter");
 const gallery = document.querySelector(".gallery");
 
 
+let token = localStorage.getItem("token");
+
+
 
 
