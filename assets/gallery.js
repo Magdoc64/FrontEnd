@@ -1,13 +1,13 @@
 // create gallery with filter
 import {getWorks, createGallery} from "./function-appli.js";
 
-let worksList = getWorks().then((works) => {
+getWorks().then((works) => {
     createGallery(works,gallery);
 });
 
 import {getCategories} from "./function-appli.js";
 
-let filterCategories = getCategories().then(categories => {
+getCategories().then(categories => {
     
     let filterAll = document.createElement("li");
     filterAll.classList.add("filter-item");
@@ -28,7 +28,7 @@ let filterCategories = getCategories().then(categories => {
     }); 
 });
 
-let filterButtons = getCategories().then(categories => {
+getCategories().then(categories => {
     
     let filterButton = document.querySelectorAll(".filter-item");
 
@@ -45,10 +45,12 @@ let filterButtons = getCategories().then(categories => {
             button.classList.add("active");
 
             let buttonsId = event.target.innerHTML;
-
+            
             if (buttonsId === "Tous"){
 
-                worksList();
+                getWorks().then((works) => {
+                    createGallery(works,gallery);
+                });
                 
             }else{
 

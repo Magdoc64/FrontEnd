@@ -22,6 +22,7 @@ const inputTitle = document.querySelector("#add-title");
 const selectCategory = document.querySelector("#category");
 
 const iFontAwesome = document.querySelector(".fa-image");
+const iFontAwesomeError= document.querySelector(".fa-triangle-exclamation");
 const commentImage = document.querySelector(".comment-add-image");
 
 const previewImage = document.querySelector(".preview-image");

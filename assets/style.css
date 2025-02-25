@@ -181,6 +181,12 @@ main{
 	margin-bottom: 1em;
 }
 
+.modify-text{
+	font-family: 'Work sans';
+	font-size: 14px;
+	font-weight: 500;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -195,6 +201,11 @@ main{
 	height: 407px;
 }
 
+.figure-gallery figcaption{
+	font-family: 'Work sans';
+	font-size: 13px;
+	font-weight: 400;
+}
 .filter{
 	display: flex;
 	justify-content: center;
@@ -203,10 +214,16 @@ main{
 .filter-item{
 	border: 1px solid #1D6154;
 	border-radius: 20px;
+	font-family: 'Syne';
 	font-size: 16px;
+	font-weight: 700;
 	color:#1D6154;
 	padding: 10px 20px;
 	margin: 30px 10px;
+}
+
+.filter-item:hover{
+	cursor: pointer;
 }
 
 .filter-item.active {
@@ -269,18 +286,28 @@ margin: auto;
 #login a{
 	color: #3D3D3D;
 	text-align: center;
+	font-family: 'Work sans';
+	font-weight: 500;
+	font-size: 14px;
 }
 
+#login label{
+	font-family: 'Work sans';
+	font-size: 14px;
+	font-weight: 500;
+}
 .email, .password {
 	height: 51px;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	margin-bottom:30px;
+	margin-top: 10px;
 }
 
 input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
+	font-family: 'Work sans';
+	font-weight: 500;
+	font-size: 14px;
 	height: 36px;
 	color: white;
 	background-color: #1D6154;
@@ -318,7 +345,7 @@ footer nav ul {
 	display: none;
 	align-items: center;
 	justify-content: center;
-	top:50px;
+	top:0;
 	left:0;
 	width:100%;
 	height:100%;
@@ -340,14 +367,12 @@ footer nav ul {
 	display: flex;
 	width: 90%;
 	justify-content: end;
-
 }
 
 .arrow-previous{
 	display: none;
 	cursor: pointer;
 	font-size: 24px;
-
 }
 
 .modal-close{
@@ -413,8 +438,6 @@ footer nav ul {
 
 .figure-gallery-modal{
 	width:100%;
-	
-	
 }
 
 .figure-gallery-modal img {
@@ -445,7 +468,6 @@ footer nav ul {
 	width: 100%;
 	justify-content: center;
 	align-items: center;
-	
 }
 
 #add-gallery{
@@ -483,6 +505,9 @@ footer nav ul {
 	font-family: "Work sans";
 	font-weight: 500;
 	font-size: 14px;
+	color:#306685;
+	justify-content: center;
+	align-items: center;
 	margin-bottom: 10px;
 }
 
@@ -522,6 +547,9 @@ footer nav ul {
 	border: none;
 	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
 	margin: 10px 0 20px 0;
+	font-family: "Work sans";
+	font-weight: 500;
+	font-size: 14px;
 }
 
 .category-picture{
@@ -545,6 +573,9 @@ footer nav ul {
 	border: none;
 	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
 	margin: 10px 0 20px 0;
+	font-family: "Work sans";
+	font-weight: 500;
+	font-size: 14px;
 }
 
 .error-sending{

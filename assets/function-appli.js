@@ -107,9 +107,8 @@ export let createGalleryImage = (worksToDisplay, place) => {
 
         let projectId = buttonTrash.value;
         
-        buttonTrash.addEventListener("click", () => {
-            console.log(projectId);
-            deleteProject(projectId, figureModal);
+        buttonTrash.addEventListener("click", (e) => {
+            deleteProject(projectId, figureModal, e);
         })
 
         const iconDelete = document.createElement("i");
@@ -136,6 +135,7 @@ export const openModal = (e) => {
 
     let imageList = getWorks().then(works => {
         createGalleryImage(works,galleryModal);
+        
     });
 
     modal.addEventListener("click", closeModal);
@@ -183,18 +183,25 @@ const statusDelete = async (projectId) => {
             "Authorization": `Bearer ${token}`},
     });
                 
-    console.log(response.status);
     return response.status;
 };
 
-const deleteProject = (projectId, figureModal) => {
+const deleteProject = (projectId, figureModal, e) => {
 
     statusDelete(projectId) .then(res => {
         if (res === 204) {
+            closeModal(e);
 
             figureModal.remove();
 
-            location = "http://127.0.0.1:5500/index.html";
+            gallery.innerHTML = "";
+            getWorks().then((works) => {
+                createGallery(works,gallery);
+            });
+
+            
+            
+            //location = "http://127.0.0.1:5500/index.html";
 
         }else if (res === 401) {
             errorSending.innerHTML = "Vous n'êtes pas autorisé à supprimer.";

@@ -45,8 +45,6 @@ export let returnModal = () => {
 // add preview image
 export let checkErrorImage = () => {
         
-    iFontAwesome.classList.remove(".fa-regular");
-    iFontAwesome.classList.remove(".fa-image");
     iFontAwesome.classList.add("fa-solid");
     iFontAwesome.classList.add("fa-triangle-exclamation");
 
@@ -55,15 +53,15 @@ export let checkErrorImage = () => {
 }
 
 export let initErrorImage = () => {
-    if (iFontAwesome.classList.contains(".fa-triangle-exclamation")) {
-
-        iFontAwesome.classList.add(".fa-regular");
-        iFontAwesome.classList.add(".fa-image");
+    
+    if (iFontAwesome.classList.contains("fa-triangle-exclamation")) {
+        iFontAwesome.classList.add("fa-regular");
+        iFontAwesome.classList.add("fa-image");
         iFontAwesome.classList.remove("fa-solid");
         iFontAwesome.classList.remove("fa-triangle-exclamation");
 
         commentImage.classList.remove("error-image");
-        commentImage.innerHTML = "jpg, png : 4mo max";  
+        commentImage.innerHTML = "jpg, png : 4mo max";
     }
 }
 

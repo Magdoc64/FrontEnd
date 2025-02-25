@@ -6,6 +6,10 @@ const closeModal = (e) => {
 
     galleryModal.innerHTML = "";
 
+    returnModal();
+
+    modalAdd.removeEventListener("click", sendFile);
+
     modal.removeEventListener("click", closeModal);
 
     buttonClose.removeEventListener("click", closeModal);
@@ -122,6 +126,8 @@ const postStatusWork = async (newProject) => {
     return response.status;
 };
 
+import { createGallery } from "../function-appli.js";
+
 const sendFile = (e) => {
     let errorFile = [];
 
@@ -161,7 +167,11 @@ const sendFile = (e) => {
 
                 closeModal(e);
 
-                location = "http://127.0.0.1:5500/index.html";
+                gallery.innerHTML = "";
+
+                getWorks().then((works) => {
+                    createGallery(works,gallery);
+                });
 
             }else if (res === 401){
                 errorSending.innerHTML = "Vous n'êtes pas autorisé à ajouter un projet.";
